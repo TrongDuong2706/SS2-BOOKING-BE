@@ -1,1 +1,2 @@
-Change readme to test jenkinsfile 0.2
+Building a hotel booking project
+![Picture](./src/images/picture.png)
