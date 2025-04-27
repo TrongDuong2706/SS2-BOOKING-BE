@@ -41,5 +41,4 @@ This is the **Backend** project for the hotel booking website.
 - Apache TomCat
 ---
 
-## 📂 Project Structure
 
