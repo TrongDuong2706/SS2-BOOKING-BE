@@ -39,7 +39,7 @@ This is the **Backend** project for the hotel booking website.
   - Integrated the endpoint with service layer hotelServiceImp.getOneHotel(hotelId) to encapsulate business logic and database interaction.
 
   - Ensured the endpoint is RESTful and supports standard HTTP status codes for success and failure scenarios.
-- Handle Exception!
+- Handle Exception!!
   - Create a custom exception that includes predefined error codes.
     ![Exception](./images/exception.jpg)
 
