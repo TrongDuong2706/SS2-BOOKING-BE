@@ -30,7 +30,7 @@ This is the **Backend** project for the hotel booking website.
     - GetUserInformation
       ![GetUserInfor](./images/getInfor.jpg)
     - **Create Hotel**
-### 25/05 - 11/05/2025
+### 05/05 - 11/05/2025
 - Built API endpoints for getDetailHotel
   - Implemented the endpoint GET /hotels/{hotelId} to retrieve detailed information of a specific hotel.
 
