@@ -29,6 +29,21 @@ This is the **Backend** project for the hotel booking website.
       ![Hotel List](./images/ListHotel.jpg)
     - GetUserInformation
       ![GetUserInfor](./images/getInfor.jpg)
+    - **Create Hotel**
+### 25/05 - 11/05/2025
+- Built API endpoints for getDetailHotel
+  - Implemented the endpoint GET /hotels/{hotelId} to retrieve detailed information of a specific hotel.
+
+  - This endpoint returns a structured ApiResponse<HotelResponse> containing the full detail of the hotel entity, including images, location, price, and category.
+
+  - Integrated the endpoint with service layer hotelServiceImp.getOneHotel(hotelId) to encapsulate business logic and database interaction.
+
+  - Ensured the endpoint is RESTful and supports standard HTTP status codes for success and failure scenarios.
+- Handle Exception!
+  - Create a custom exception that includes predefined error codes.
+    ![Exception](./images/exception.jpg)
+
+
 ---
 
 ## 🚀 Technologies Used
