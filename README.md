@@ -42,8 +42,19 @@ This is the **Backend** project for the hotel booking website.
 - Handle Exception!!
   - Create a custom exception that includes predefined error codes.
     ![Exception](./images/exception.jpg)
-
-
+### 12/05 - 18/05/2025
+  - Built VNPAY Payment API to handle payment transactions.
+    Integrated Email Sending functionality using Brevo (formerly Sendinblue).
+   ![VNPAY](./images/codevnpay.jpg)
+   ![VNPAY](./images/brevo.jpg)
+  - Work:
+    Created endpoints to initiate and verify VNPAY payments.
+    Sent booking confirmation emails to users upon successful transactions via Brevo SMTP.
+    ![VNPAY](./images/Email.jpg)
+### 19/05 - 25/05/2025
+  - Developed Comment API for users to post and fetch reviews on hotels.
+  - Implemented Related Hotels API, recommending hotels based on category, location, or rating.
+  - Built Profile Management API allowing users to retrieve and update their profile information.
 ---
 
 ## 🚀 Technologies Used
