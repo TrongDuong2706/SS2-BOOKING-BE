@@ -57,10 +57,19 @@ This is the **Backend** project for the hotel booking website.
   - Built Profile Management API allowing users to retrieve and update their profile information.
 ### 26/05 - 01/06/2025
   - API List Hotel with pagination and search params
-    ![VNPAY](./images/ListHotelAdminPostMan.jpg)
+    ![List-Hotel](./images/ListHotelAdminPostMan.jpg)
   - API Create Hotel with cloudinary
-    ![VNPAY](./images/CreateHotelAdminAPI.jpg)
+    ![Create-Hotel](./images/CreateHotelAdminAPI.jpg)
   - Edit hotel API is similar to create Hotel API, but will get information by Hotel ID
+### 02/06 - 08/06/2025
+- API List Room with params
+  ![List Room](./images/GetRoomAdmin.jpg)
+- API Create Room with cloudinary
+  ![Create-Room](./images/AddRoomAdmin.jpg)
+- API Edit Room
+  ![Edit-Room](./images/EdtRoomAdmin.jpg)
+- Room APIS
+  ![Room-APIS](./images/RoomAPIS.jpg)
 ---
 
 ## 🚀 Technologies Used
