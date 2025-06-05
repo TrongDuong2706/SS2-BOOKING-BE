@@ -80,6 +80,7 @@ This is the **Backend** project for the hotel booking website.
 - OAuth 2.0 (Google Sign-In)
 - Maven
 - Apache TomCat
+- Spring Security
 ---
 
 
