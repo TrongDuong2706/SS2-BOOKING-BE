@@ -3,6 +3,8 @@ package com.devteria.identityservice.controller;
 import com.devteria.identityservice.dto.request.ApiResponse;
 import com.devteria.identityservice.dto.request.HotelCreationRequest;
 import com.devteria.identityservice.dto.request.RoomCreationRequest;
+import com.devteria.identityservice.dto.response.HotelResponse;
+import com.devteria.identityservice.dto.response.PaginatedResponse;
 import com.devteria.identityservice.dto.response.RoomResponse;
 import com.devteria.identityservice.service.RoomService;
 import com.devteria.identityservice.service.imp.RoomServiceImp;
@@ -28,7 +30,6 @@ public class RoomController {
     public ApiResponse<RoomResponse> createRoom(
             @RequestPart("room") RoomCreationRequest request,
             @RequestPart("room_images") List<MultipartFile> files){
-
         var room = roomServiceImp.createRoom(request,files);
         return ApiResponse.<RoomResponse>builder()
                 .result(room)
@@ -53,6 +54,32 @@ public class RoomController {
     @GetMapping("payment")
     public String test(){
         return "hello";
+    }
+
+    @GetMapping()
+    public ApiResponse<PaginatedResponse<RoomResponse>> getALlRoom( @RequestParam(defaultValue = "1") int page,
+                                                 @RequestParam(defaultValue = "4") int size){
+        int adjustedPage = Math.max(page - 1, 0);
+        var rooms = roomServiceImp.getAllRooms(adjustedPage, size);
+        return ApiResponse.<PaginatedResponse<RoomResponse>>builder()
+                .result(rooms)
+                .build();
+    }
+    @PutMapping("/{roomId}")
+    public ApiResponse<RoomResponse> updateRoom(@PathVariable int roomId,
+                                                @RequestPart("room") RoomCreationRequest request,
+                                                @RequestPart(value ="room_images", required = false) List<MultipartFile> files){
+        RoomResponse updateRoom = roomServiceImp.updateRoom(request, files,roomId );
+        return ApiResponse.<RoomResponse>builder()
+                .result(updateRoom)
+                .build();
+    }
+    @DeleteMapping("/{roomId}")
+    public ApiResponse<Void> deleteRoom(@PathVariable int roomId) {
+        roomServiceImp.deleteRoom(roomId);
+        return ApiResponse.<Void>builder()
+                .message("Room deleted successfully")
+                .build();
     }
 
 }

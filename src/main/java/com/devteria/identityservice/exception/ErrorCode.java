@@ -24,6 +24,10 @@ public enum ErrorCode {
     CANNOT_SEND_EMAIL(1014, "Can not send email", HttpStatus.BAD_REQUEST),
     PASSWORD_NOT_CORRECT(1015, "Password not correct", HttpStatus.BAD_REQUEST),
     INVALID_QR_DATA(1016, "Error QR", HttpStatus.BAD_REQUEST),
+    BOOKING_NOT_FOUND(1017, "Booking not found", HttpStatus.BAD_REQUEST),
+    ROOM_NOT_FOUND(1018, "Room not found", HttpStatus.BAD_REQUEST),
+
+
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

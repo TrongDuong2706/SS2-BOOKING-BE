@@ -71,7 +71,9 @@ This is the **Backend** project for the hotel booking website.
 - Room APIS
   ![Room-APIS](./images/RoomAPIS.jpg)
 ---
-
+## 09/06 - 15/06/2025
+  - APIs Bookings
+  ![Booking-APIS](./images/adminbooking.jpg)
 ## 🚀 Technologies Used
 - Spring Boot
 - Java 21

@@ -5,12 +5,15 @@ import com.devteria.identityservice.dto.request.BookingRequest;
 import com.devteria.identityservice.dto.request.email.request.Recipient;
 import com.devteria.identityservice.dto.request.email.request.SendEmailRequest;
 import com.devteria.identityservice.dto.response.BookingResponse;
+import com.devteria.identityservice.dto.response.PaginatedResponse;
+import com.devteria.identityservice.dto.response.RoomResponse;
 import com.devteria.identityservice.entity.Booking;
 import com.devteria.identityservice.entity.Hotel;
 import com.devteria.identityservice.entity.Room;
 import com.devteria.identityservice.exception.AppException;
 import com.devteria.identityservice.exception.ErrorCode;
 import com.devteria.identityservice.mapper.BookingMapper;
+import com.devteria.identityservice.mapper.RoomMapper;
 import com.devteria.identityservice.repository.BookingRepository;
 import com.devteria.identityservice.repository.HotelRepository;
 import com.devteria.identityservice.repository.RoomRepository;
@@ -20,6 +23,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +42,8 @@ public class BookingService implements BookingServiceImp {
     PaymentService paymentService;
     HotelRepository hotelRepository;
     RoomRepository roomRepository;
+    RoomMapper roomMapper;
+
 
     @Override
     public BookingResponse createBooking(BookingRequest request, HttpServletRequest httpRequest) {
@@ -44,18 +51,23 @@ public class BookingService implements BookingServiceImp {
         Hotel hotel = hotelRepository.findById(request.getHotelId())
                 .orElseThrow(() -> new RuntimeException("Hotel not found with id: " + request.getHotelId()));
         //Lấy thông tin Room
-        Room room = roomRepository.findById(request.getRoomId()).orElseThrow(() -> new RuntimeException("Room not found"));
+        Room room = roomRepository.findById(request.getRoomId())
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+
+        // Tạo yêu cầu thanh toán VNPay trước
+        PaymentDTO.VNPayResponse vnPayResponse = paymentService.createVnPayPayment(httpRequest, request);
+        String paymentUrl = vnPayResponse.getPaymentUrl();
+
+        // Chỉ tạo booking khi đã tạo được payment URL thành công
         Booking booking = bookingMapper.toBooking(request);
         String uniqueCode = UUID.randomUUID().toString();
         booking.setCode(uniqueCode);
         bookingRepository.save(booking);
 
-        // Tạo yêu cầu thanh toán VNPay
-        PaymentDTO.VNPayResponse vnPayResponse = paymentService.createVnPayPayment(httpRequest, request);
-        String paymentUrl = vnPayResponse.getPaymentUrl();
         // Tạo BookingResponse
         BookingResponse bookingResponse = bookingMapper.toBookingResponse(booking);
         bookingResponse.setPaymentUrl(paymentUrl);
+
         // Gửi email xác nhận
         SendEmailRequest emailRequest = SendEmailRequest.builder()
                 .to(Recipient.builder()
@@ -97,12 +109,13 @@ public class BookingService implements BookingServiceImp {
                         "            <p style=\"margin: 0;\">Xin cảm ơn quý khách đã đặt phòng tại Trip.com .</p>\n" +
                         "        </div>\n" +
                         "    </div>\n" +
-                        "</div>")
+                        "</div>") // (giữ nguyên nội dung email như cũ)
                 .build();
         emailService.sendEmail(emailRequest);
 
         return bookingResponse;
     }
+
 
     public BookingResponse getOneBooking(int bookingId){
         var booking = bookingRepository.findById(bookingId).orElseThrow(
@@ -119,4 +132,38 @@ public class BookingService implements BookingServiceImp {
     public List<Object[]> getMonthlyRevenue() {
         return bookingRepository.findMonthlyRevenue();
     }
+
+    @Override
+    public PaginatedResponse<BookingResponse> getAllBooking(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Booking> bookingPage = bookingRepository.findAll(pageRequest);
+
+        List<BookingResponse> bookingResponses = bookingPage.getContent()
+                .stream()
+                .map(bookingMapper::toBookingResponse)
+                .toList();
+        return PaginatedResponse.<BookingResponse>builder()
+                .totalItems((int) bookingPage.getTotalElements())
+                .totalPages(bookingPage.getTotalPages())
+                .currentPage(bookingPage.getNumber())
+                .pageSize(bookingPage.getSize())
+                .hasNextPage(bookingPage.hasNext())
+                .hasPreviousPage(bookingPage.hasPrevious())
+                .hotels(bookingResponses)
+                .build();
+    }
+    @Override
+    public RoomResponse getRoomByBookingId(int bookingId) {
+        // Lấy thông tin booking
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new AppException(ErrorCode.BOOKING_NOT_FOUND));
+
+        // Lấy thông tin room theo roomId trong booking
+        Room room = roomRepository.findById(booking.getRoom().getId())
+                .orElseThrow(() -> new AppException(ErrorCode.ROOM_NOT_FOUND));
+
+        // Convert sang DTO nếu bạn có RoomMapper
+        return roomMapper.toRoomResponse(room);
+    }
+
 }

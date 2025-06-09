@@ -29,8 +29,8 @@ public class CustomJwtDecoder implements JwtDecoder {
 
     @Override
     public Jwt decode(String token) throws JwtException {
-
         try {
+            //Trả về true / false
             var response = authenticationService.introspect(
                     IntrospectRequest.builder().token(token).build());
 

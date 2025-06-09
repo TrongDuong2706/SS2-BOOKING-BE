@@ -2,6 +2,7 @@ package com.devteria.identityservice.service;
 
 import com.devteria.identityservice.configuration.VNPAYConfig;
 import com.devteria.identityservice.dto.PaymentDTO;
+import com.devteria.identityservice.dto.request.BookingRequest;
 import com.devteria.identityservice.util.VNPAYUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
@@ -50,4 +51,3 @@ public class PaymentService {
                 .build();
     }
 }
-
